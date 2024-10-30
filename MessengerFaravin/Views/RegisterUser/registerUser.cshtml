@@ -1,0 +1,83 @@
+﻿
+@{
+    // ViewBag.Title = ViewBag.Titlee;
+    Layout = "~/Views/RegisterUser/registerUserLayout.cshtml";
+}
+
+
+<div class="container">
+
+
+    @* <input type="button" id="submit" value="register"  ng-click="toggle()" />*@
+    @*<input type="checkbox" ng-model="switch2" />*@
+    @*<input type="text" id="firstName" placeholder="first name" ng-model="h" />*@
+
+
+    @*<div class="form" id="regForm"  ng-show="h>10">*@
+    <div class="form" id="regForm">
+
+        <input type="text" id="firstName" placeholder="first name" ng-model="txtFirstName" />
+        <input type="text" id="lastName" placeholder="last name" ng-model="txtLastName" />
+        <input type="text" id="phoneNumber" placeholder="phone number" ng-model="txtPhoneNumber" />
+        <input type="text" id="userName" placeholder="username" ng-model="txtUserName" ng-disabled="true" />
+        <input type="password" id="password" placeholder="password" ng-model="txtPassword" />
+        <input type="password" id="confirmPassword" placeholder="confirm password" ng-model="txtConfirmPassword" />
+        <input type="date" id="birthDate" placeholder="birth date" ng-model="txtBirthDate" /> <br>
+        <p id="sss">  </p>
+        <input type="button" id="subBtn" value="sub" ng-click="RegisterUsers()" />
+
+
+
+        @*<div ng-init="a=2;b=3">jipfs {{a * b}}</div>*@
+
+        @* <p ng-bind="txtBirthDate"></p>*@
+
+        @*<div ng-init="names=[
+             {name:'ali',family:'m'},
+             {name:'fasd',family:'q'},
+             {name:'qqq',family:'xx'}]">
+
+            <ul>
+                <li ng-repeat="x in names">{{x.name +  x.family}}</li>
+
+            </ul>
+
+        </div>*@
+
+        @*<div ng-init="names=[
+             {name:'ali',family:'m'},
+             {name:'fasd',family:'q'},
+             {name:'qqq',family:'xx'}]">
+
+            <ul>
+                <li ng-repeat="x in names | filter:txtFirstName | orderBy:'family'  "> {{ (x.name | uppercase)+ ', ' + x.family}} </li>
+
+            </ul>
+
+        </div>*@
+
+        @*<div ng-init="switch=true">
+            <input type="text" ng-disabled="switch" />
+            <button ng-disabled="switch">fadsfs</button>
+            <input type="checkbox" ng-model="switch" />
+
+
+        </div>*@
+
+
+
+
+    <div id="_userList" class="userList">
+        @Html.Action("List")
+
+    </div>
+    </div>
+    
+    
+
+</div>
+
+@section Script
+{
+    <script src="~/ScriptQueries/registerUserScripts.js"></script>
+}

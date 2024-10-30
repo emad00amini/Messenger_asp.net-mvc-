@@ -1,0 +1,52 @@
+﻿@model IEnumerable<MessengerFaravin.Models.message>
+
+<ul>
+    @if (Model != null)
+    {
+        foreach (var item in Model)
+        {
+            if (item != null)
+            {
+
+                if (item.sender_id == ViewBag.userId)
+                {
+                    <li class="myMessage" id="_myMessage">
+                        <div class="message-data">
+                            <span class="message-data-name"> @item.user.firstName   @item.user.lastName</span>
+                            <span class="message-data-time">@item.sendDate</span>
+                        </div>
+                        <div class="message my-message">
+                            @item.messageText
+                        </div>
+                    </li>
+
+                }
+                else if (item.sender_id == ViewBag.contactId)
+                {
+                    <li id="_contactMessage" class="contactMessage">
+                        <div class="message-data">
+                            <span class="message-data-name"> @item.user.firstName   @item.user.lastName</span>
+                            <span class="message-data-time">@item.sendDate</span>
+                        </div>
+                        <div class="message my-message">
+                            @item.messageText
+                        </div>
+                    </li>
+
+                }
+
+            }
+
+
+        }
+    }
+
+
+    
+
+
+
+
+
+
+</ul>

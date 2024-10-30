@@ -1,0 +1,71 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+
+    Layout = "~/Views/MainPage/mainPageLayout.cshtml";
+}
+
+
+
+
+<div class="folders" id="folders">
+    <ul>
+        <a href="#_userContacts" rel="modal:open">
+        <li class="menu">
+            <img src="~/Content/NewFolder1/icons8-menu-50.png" alt="cds">
+            <div>menu</div>
+        </li>
+        </a>
+        <br>
+        <li ng-click="alert()">
+            <img src="~/Content/NewFolder1/icons8-folder-30 (1).png" alt="cds">
+            <div>private</div>
+        </li>
+        <li>
+            <img src="~/Content/NewFolder1/icons8-folder-30 (1).png" alt="cds">
+            <div>news</div>
+        </li>
+        <li>
+            <img src="~/Content/NewFolder1/icons8-folder-30 (1).png" alt="cds">
+            <div>musics</div>
+        </li>
+    </ul>
+</div>
+
+
+
+<div class="main">
+    <div class="list" id="_list">
+        <div class="search">
+            <input type="text" placeholder="search">
+        </div>
+        <div id="_messagesList">
+            @Html.Action("MessageList")
+        </div>
+        
+    </div>
+    <div class="chat" id="_chat">
+        <input type="text" class="chatBox" id="_chatBox" placeholder="write a message"  ng-keypress="send($event)">
+        <input type="button" id="_sendBtn" value="send"  />
+        <div id="_chatMessages">@Html.Action("OpenContact")</div>
+
+            
+
+        </div>
+    </div>
+
+<div class="userContacts" id="_userContacts">
+    @Html.Action("UserContactsList")
+</div>
+
+<div id="_newContact" class="newContact">
+    <input type="text" id="firstName" placeholder="first name" ng-model="txtFirstName" />
+    <input type="text" id="lastName" placeholder="last name" ng-model="txtLastName" />
+    <input type="text" id="phoneNumber" placeholder="phone number" ng-model="txtPhoneNumber" />
+    <input type="button" id="subBtn" value="sub" ng-click="addContact()"/>
+</div>
+
+@section Script
+{
+    <script src="~/ScriptQueries/mainPageScripts.js"></script>
+}

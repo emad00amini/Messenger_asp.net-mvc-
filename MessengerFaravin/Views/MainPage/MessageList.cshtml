@@ -1,0 +1,34 @@
+﻿@*@model IEnumerable<MessengerFaravin.Models.group>*@
+@model IEnumerable<(string chatType, string name, string key, DateTime time)>
+@*@model dynamic*@
+
+    <ul>
+
+        @foreach (var item in Model)
+        {
+            if (item.chatType == "pv")
+            {
+                <li id="@(item.key)" ng-click="openContact(@item.key,@item.chatType)"> <img src="~/Content/NewFolder1/@(item.key).jpg" alt=""> @item.chatType,@item.key,@item.name,@item.time.ToString("g") </li>
+
+            }
+            else if (item.chatType == "group")
+            {
+                <li id="@(item.key)" ng-click="openContact(@item.key,@item.chatType)"> <img src="~/Content/NewFolder1/@(item.name).jpg" alt=""> @item.chatType,@item.key,@item.name,@item.time.ToString("g") </li>
+
+            }
+        }
+
+    </ul>
+
+@*@model IEnumerable<string>
+
+
+<ul>
+
+    @foreach (var item in Model)
+    {
+            <li >  @item </li>
+    }
+
+</ul>*@
+

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="3bc5b4f854f2410ba8253473b96e3c0c" Name="Diagram1">
+        <EntityTypeShape EntityType="messengerModel.contacts" Width="1.5" PointX="3" PointY="4.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="messengerModel.group" Width="1.5" PointX="3.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="messengerModel.groupsUsers" Width="1.5" PointX="6" PointY="6.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="messengerModel.message" Width="1.5" PointX="3" PointY="11" IsExpanded="true" />
+        <EntityTypeShape EntityType="messengerModel.messageRecipient" Width="1.5" PointX="5.25" PointY="10" IsExpanded="true" />
+        <EntityTypeShape EntityType="messengerModel.user" Width="1.5" PointX="0.75" PointY="6.125" IsExpanded="true" />
+        <AssociationConnector Association="messengerModel.FK_contacts_contact" ManuallyRouted="false" />
+        <AssociationConnector Association="messengerModel.FK_contacts_listOwner" ManuallyRouted="false" />
+        <AssociationConnector Association="messengerModel.FK_messageRecipient_groupReceiverId" ManuallyRouted="false" />
+        <AssociationConnector Association="messengerModel.FK_user_Group_groupId" ManuallyRouted="false" />
+        <AssociationConnector Association="messengerModel.FK_user_Group_userId" ManuallyRouted="false" />
+        <AssociationConnector Association="messengerModel.FK_message_parnetMessageId" ManuallyRouted="false" />
+        <AssociationConnector Association="messengerModel.FK_message_senderId" ManuallyRouted="false" />
+        <AssociationConnector Association="messengerModel.FK_messageRecipient_messageId" ManuallyRouted="false" />
+        <AssociationConnector Association="messengerModel.FK_messageRecipient_userReceiverId" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

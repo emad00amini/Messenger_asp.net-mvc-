@@ -1,0 +1,564 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="messengerModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="contacts">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="listOwner_id" Type="int" Nullable="false" />
+          <Property Name="contactUser_id" Type="int" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="family" Type="nvarchar" MaxLength="50" />
+          <Property Name="status" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="group">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="groupName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="createdData" Type="date" Nullable="false" />
+          <Property Name="isActive" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="groupsUsers">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="user_id" Type="int" Nullable="false" />
+          <Property Name="group_id" Type="int" Nullable="false" />
+          <Property Name="joinData" Type="date" Nullable="false" />
+          <Property Name="isActive" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="message">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="sender_id" Type="int" Nullable="false" />
+          <Property Name="subject" Type="nvarchar" MaxLength="50" />
+          <Property Name="messageText" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="sendDate" Type="date" Nullable="false" />
+          <Property Name="sendTime" Type="datetime" Nullable="false" />
+          <Property Name="parentMessage_id" Type="int" />
+          <Property Name="isActive" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="messageRecipient">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="message_id" Type="int" Nullable="false" />
+          <Property Name="userReceiver_id" Type="int" />
+          <Property Name="groupReceiver_id" Type="int" />
+        </EntityType>
+        <EntityType Name="user">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="firstName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="lastName" Type="nvarchar" MaxLength="50" />
+          <Property Name="phoneNumber" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="password" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="birthDate" Type="date" />
+          <Property Name="joinDate" Type="date" Nullable="false" />
+          <Property Name="isActive" Type="bit" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_contacts_contactUser">
+          <End Role="user" Type="Self.user" Multiplicity="1" />
+          <End Role="contacts" Type="Self.contacts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="contacts">
+              <PropertyRef Name="contactUser_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_contacts_listOwner">
+          <End Role="user" Type="Self.user" Multiplicity="1" />
+          <End Role="contacts" Type="Self.contacts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="contacts">
+              <PropertyRef Name="listOwner_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_message_parnetMessageId">
+          <End Role="message" Type="Self.message" Multiplicity="0..1" />
+          <End Role="message1" Type="Self.message" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="message">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="message1">
+              <PropertyRef Name="parentMessage_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_message_senderId">
+          <End Role="user" Type="Self.user" Multiplicity="1" />
+          <End Role="message" Type="Self.message" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="message">
+              <PropertyRef Name="sender_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_messageRecipient_groupReceiverId">
+          <End Role="group" Type="Self.group" Multiplicity="0..1" />
+          <End Role="messageRecipient" Type="Self.messageRecipient" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="group">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="messageRecipient">
+              <PropertyRef Name="groupReceiver_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_messageRecipient_messageId">
+          <End Role="message" Type="Self.message" Multiplicity="1" />
+          <End Role="messageRecipient" Type="Self.messageRecipient" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="message">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="messageRecipient">
+              <PropertyRef Name="message_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_messageRecipient_userReceiverId">
+          <End Role="user" Type="Self.user" Multiplicity="0..1" />
+          <End Role="messageRecipient" Type="Self.messageRecipient" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="messageRecipient">
+              <PropertyRef Name="userReceiver_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_user&amp;Group_groupId">
+          <End Role="group" Type="Self.group" Multiplicity="1" />
+          <End Role="groupsUsers" Type="Self.groupsUsers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="group">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="groupsUsers">
+              <PropertyRef Name="group_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_user&amp;Group_userId">
+          <End Role="user" Type="Self.user" Multiplicity="1" />
+          <End Role="groupsUsers" Type="Self.groupsUsers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="groupsUsers">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="messengerModelStoreContainer">
+          <EntitySet Name="contacts" EntityType="Self.contacts" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="group" EntityType="Self.group" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="groupsUsers" EntityType="Self.groupsUsers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="message" EntityType="Self.message" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="messageRecipient" EntityType="Self.messageRecipient" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="user" EntityType="Self.user" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_contacts_contactUser" Association="Self.FK_contacts_contactUser">
+            <End Role="user" EntitySet="user" />
+            <End Role="contacts" EntitySet="contacts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_contacts_listOwner" Association="Self.FK_contacts_listOwner">
+            <End Role="user" EntitySet="user" />
+            <End Role="contacts" EntitySet="contacts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_message_parnetMessageId" Association="Self.FK_message_parnetMessageId">
+            <End Role="message" EntitySet="message" />
+            <End Role="message1" EntitySet="message" />
+          </AssociationSet>
+          <AssociationSet Name="FK_message_senderId" Association="Self.FK_message_senderId">
+            <End Role="user" EntitySet="user" />
+            <End Role="message" EntitySet="message" />
+          </AssociationSet>
+          <AssociationSet Name="FK_messageRecipient_groupReceiverId" Association="Self.FK_messageRecipient_groupReceiverId">
+            <End Role="group" EntitySet="group" />
+            <End Role="messageRecipient" EntitySet="messageRecipient" />
+          </AssociationSet>
+          <AssociationSet Name="FK_messageRecipient_messageId" Association="Self.FK_messageRecipient_messageId">
+            <End Role="message" EntitySet="message" />
+            <End Role="messageRecipient" EntitySet="messageRecipient" />
+          </AssociationSet>
+          <AssociationSet Name="FK_messageRecipient_userReceiverId" Association="Self.FK_messageRecipient_userReceiverId">
+            <End Role="user" EntitySet="user" />
+            <End Role="messageRecipient" EntitySet="messageRecipient" />
+          </AssociationSet>
+          <AssociationSet Name="FK_user&amp;Group_groupId" Association="Self.FK_user&amp;Group_groupId">
+            <End Role="group" EntitySet="group" />
+            <End Role="groupsUsers" EntitySet="groupsUsers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_user&amp;Group_userId" Association="Self.FK_user&amp;Group_userId">
+            <End Role="user" EntitySet="user" />
+            <End Role="groupsUsers" EntitySet="groupsUsers" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="messengerModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="contacts">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="listOwner_id" Type="Int32" Nullable="false" />
+          <Property Name="contactUser_id" Type="Int32" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="family" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="status" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="user" Relationship="Self.FK_contacts_contact" FromRole="contacts" ToRole="user" />
+          <NavigationProperty Name="user1" Relationship="Self.FK_contacts_listOwner" FromRole="contacts" ToRole="user" />
+        </EntityType>
+        <EntityType Name="group">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="groupName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="createdData" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="isActive" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="messageRecipient" Relationship="Self.FK_messageRecipient_groupReceiverId" FromRole="group" ToRole="messageRecipient" />
+          <NavigationProperty Name="groupsUsers" Relationship="Self.FK_user_Group_groupId" FromRole="group" ToRole="groupsUsers" />
+        </EntityType>
+        <EntityType Name="groupsUsers">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="user_id" Type="Int32" Nullable="false" />
+          <Property Name="group_id" Type="Int32" Nullable="false" />
+          <Property Name="joinData" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="isActive" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="group" Relationship="Self.FK_user_Group_groupId" FromRole="groupsUsers" ToRole="group" />
+          <NavigationProperty Name="user" Relationship="Self.FK_user_Group_userId" FromRole="groupsUsers" ToRole="user" />
+        </EntityType>
+        <EntityType Name="message">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="sender_id" Type="Int32" Nullable="false" />
+          <Property Name="subject" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="messageText" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="sendDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="sendTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="parentMessage_id" Type="Int32" />
+          <Property Name="isActive" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="message1" Relationship="Self.FK_message_parnetMessageId" FromRole="message" ToRole="message1" />
+          <NavigationProperty Name="message2" Relationship="Self.FK_message_parnetMessageId" FromRole="message1" ToRole="message" />
+          <NavigationProperty Name="user" Relationship="Self.FK_message_senderId" FromRole="message" ToRole="user" />
+          <NavigationProperty Name="messageRecipient" Relationship="Self.FK_messageRecipient_messageId" FromRole="message" ToRole="messageRecipient" />
+        </EntityType>
+        <EntityType Name="messageRecipient">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="message_id" Type="Int32" Nullable="false" />
+          <Property Name="userReceiver_id" Type="Int32" />
+          <Property Name="groupReceiver_id" Type="Int32" />
+          <NavigationProperty Name="group" Relationship="Self.FK_messageRecipient_groupReceiverId" FromRole="messageRecipient" ToRole="group" />
+          <NavigationProperty Name="message" Relationship="Self.FK_messageRecipient_messageId" FromRole="messageRecipient" ToRole="message" />
+          <NavigationProperty Name="user" Relationship="Self.FK_messageRecipient_userReceiverId" FromRole="messageRecipient" ToRole="user" />
+        </EntityType>
+        <EntityType Name="user">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="firstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="lastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="phoneNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="birthDate" Type="DateTime" Precision="0" />
+          <Property Name="joinDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="isActive" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="contacts" Relationship="Self.FK_contacts_contact" FromRole="user" ToRole="contacts" />
+          <NavigationProperty Name="contacts1" Relationship="Self.FK_contacts_listOwner" FromRole="user" ToRole="contacts" />
+          <NavigationProperty Name="groupsUsers" Relationship="Self.FK_user_Group_userId" FromRole="user" ToRole="groupsUsers" />
+          <NavigationProperty Name="message" Relationship="Self.FK_message_senderId" FromRole="user" ToRole="message" />
+          <NavigationProperty Name="messageRecipient" Relationship="Self.FK_messageRecipient_userReceiverId" FromRole="user" ToRole="messageRecipient" />
+          <Property Name="password" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <Association Name="FK_contacts_contact">
+          <End Role="user" Type="Self.user" Multiplicity="1" />
+          <End Role="contacts" Type="Self.contacts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="contacts">
+              <PropertyRef Name="listOwner_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_contacts_listOwner">
+          <End Role="user" Type="Self.user" Multiplicity="1" />
+          <End Role="contacts" Type="Self.contacts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="contacts">
+              <PropertyRef Name="contactUser_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_messageRecipient_groupReceiverId">
+          <End Role="group" Type="Self.group" Multiplicity="0..1" />
+          <End Role="messageRecipient" Type="Self.messageRecipient" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="group">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="messageRecipient">
+              <PropertyRef Name="groupReceiver_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_user_Group_groupId">
+          <End Role="group" Type="Self.group" Multiplicity="1" />
+          <End Role="groupsUsers" Type="Self.groupsUsers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="group">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="groupsUsers">
+              <PropertyRef Name="group_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_user_Group_userId">
+          <End Role="user" Type="Self.user" Multiplicity="1" />
+          <End Role="groupsUsers" Type="Self.groupsUsers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="groupsUsers">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_message_parnetMessageId">
+          <End Role="message" Type="Self.message" Multiplicity="0..1" />
+          <End Role="message1" Type="Self.message" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="message">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="message1">
+              <PropertyRef Name="parentMessage_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_message_senderId">
+          <End Role="user" Type="Self.user" Multiplicity="1" />
+          <End Role="message" Type="Self.message" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="message">
+              <PropertyRef Name="sender_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_messageRecipient_messageId">
+          <End Role="message" Type="Self.message" Multiplicity="1" />
+          <End Role="messageRecipient" Type="Self.messageRecipient" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="message">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="messageRecipient">
+              <PropertyRef Name="message_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_messageRecipient_userReceiverId">
+          <End Role="user" Type="Self.user" Multiplicity="0..1" />
+          <End Role="messageRecipient" Type="Self.messageRecipient" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="messageRecipient">
+              <PropertyRef Name="userReceiver_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="faravinEntities1" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="contacts" EntityType="Self.contacts" />
+          <EntitySet Name="group" EntityType="Self.group" />
+          <EntitySet Name="groupsUsers" EntityType="Self.groupsUsers" />
+          <EntitySet Name="message" EntityType="Self.message" />
+          <EntitySet Name="messageRecipient" EntityType="Self.messageRecipient" />
+          <EntitySet Name="user" EntityType="Self.user" />
+          <AssociationSet Name="FK_contacts_contact" Association="Self.FK_contacts_contact">
+            <End Role="user" EntitySet="user" />
+            <End Role="contacts" EntitySet="contacts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_contacts_listOwner" Association="Self.FK_contacts_listOwner">
+            <End Role="user" EntitySet="user" />
+            <End Role="contacts" EntitySet="contacts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_messageRecipient_groupReceiverId" Association="Self.FK_messageRecipient_groupReceiverId">
+            <End Role="group" EntitySet="group" />
+            <End Role="messageRecipient" EntitySet="messageRecipient" />
+          </AssociationSet>
+          <AssociationSet Name="FK_user_Group_groupId" Association="Self.FK_user_Group_groupId">
+            <End Role="group" EntitySet="group" />
+            <End Role="groupsUsers" EntitySet="groupsUsers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_user_Group_userId" Association="Self.FK_user_Group_userId">
+            <End Role="user" EntitySet="user" />
+            <End Role="groupsUsers" EntitySet="groupsUsers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_message_parnetMessageId" Association="Self.FK_message_parnetMessageId">
+            <End Role="message" EntitySet="message" />
+            <End Role="message1" EntitySet="message" />
+          </AssociationSet>
+          <AssociationSet Name="FK_message_senderId" Association="Self.FK_message_senderId">
+            <End Role="user" EntitySet="user" />
+            <End Role="message" EntitySet="message" />
+          </AssociationSet>
+          <AssociationSet Name="FK_messageRecipient_messageId" Association="Self.FK_messageRecipient_messageId">
+            <End Role="message" EntitySet="message" />
+            <End Role="messageRecipient" EntitySet="messageRecipient" />
+          </AssociationSet>
+          <AssociationSet Name="FK_messageRecipient_userReceiverId" Association="Self.FK_messageRecipient_userReceiverId">
+            <End Role="user" EntitySet="user" />
+            <End Role="messageRecipient" EntitySet="messageRecipient" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="messengerModelStoreContainer" CdmEntityContainer="faravinEntities1">
+          <EntitySetMapping Name="contacts">
+            <EntityTypeMapping TypeName="messengerModel.contacts">
+              <MappingFragment StoreEntitySet="contacts">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="listOwner_id" ColumnName="listOwner_id" />
+                <ScalarProperty Name="contactUser_id" ColumnName="contactUser_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="family" ColumnName="family" />
+                <ScalarProperty Name="status" ColumnName="status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="group">
+            <EntityTypeMapping TypeName="messengerModel.group">
+              <MappingFragment StoreEntitySet="group">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="groupName" ColumnName="groupName" />
+                <ScalarProperty Name="createdData" ColumnName="createdData" />
+                <ScalarProperty Name="isActive" ColumnName="isActive" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="groupsUsers">
+            <EntityTypeMapping TypeName="messengerModel.groupsUsers">
+              <MappingFragment StoreEntitySet="groupsUsers">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="group_id" ColumnName="group_id" />
+                <ScalarProperty Name="joinData" ColumnName="joinData" />
+                <ScalarProperty Name="isActive" ColumnName="isActive" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="message">
+            <EntityTypeMapping TypeName="messengerModel.message">
+              <MappingFragment StoreEntitySet="message">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="sender_id" ColumnName="sender_id" />
+                <ScalarProperty Name="subject" ColumnName="subject" />
+                <ScalarProperty Name="messageText" ColumnName="messageText" />
+                <ScalarProperty Name="sendDate" ColumnName="sendDate" />
+                <ScalarProperty Name="sendTime" ColumnName="sendTime" />
+                <ScalarProperty Name="parentMessage_id" ColumnName="parentMessage_id" />
+                <ScalarProperty Name="isActive" ColumnName="isActive" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="messageRecipient">
+            <EntityTypeMapping TypeName="messengerModel.messageRecipient">
+              <MappingFragment StoreEntitySet="messageRecipient">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="message_id" ColumnName="message_id" />
+                <ScalarProperty Name="userReceiver_id" ColumnName="userReceiver_id" />
+                <ScalarProperty Name="groupReceiver_id" ColumnName="groupReceiver_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="user">
+            <EntityTypeMapping TypeName="messengerModel.user">
+              <MappingFragment StoreEntitySet="user">
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="firstName" ColumnName="firstName" />
+                <ScalarProperty Name="lastName" ColumnName="lastName" />
+                <ScalarProperty Name="phoneNumber" ColumnName="phoneNumber" />
+                <ScalarProperty Name="birthDate" ColumnName="birthDate" />
+                <ScalarProperty Name="joinDate" ColumnName="joinDate" />
+                <ScalarProperty Name="isActive" ColumnName="isActive" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

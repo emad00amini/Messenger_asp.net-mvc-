@@ -1,0 +1,25 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/LoginUser/loginUserLayout.cshtml";
+}
+
+<h2>LoginUser</h2>
+
+<div class="container">
+
+    <div class="form">
+        <input type="text" placeholder="username" ng-model="txtUserName">
+        <input type="password" placeholder="password" ng-model="txtPassword"><br>
+        <input type="button" value="login" ng-click="LoginUser()">
+        <p>not regisered? <a href="~/RegisterUser/Index">create an account</a></p>
+
+    </div>
+</div>
+
+
+
+@section Script
+{
+    <script src="~/ScriptQueries/loginUserScripts.js"></script>
+}
